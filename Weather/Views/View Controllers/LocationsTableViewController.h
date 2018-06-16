@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  LocationsTableViewController.h
 //  Weather
 //
 //  Created by Jian on 6/15/18.
@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
 
+
+@interface LocationsTableViewController : UITableViewController
 
 @end
-
