@@ -18,8 +18,6 @@
 // https://www.metaweather.com/api/location/search/?query=london
 // https://www.metaweather.com/api/location/search/?lattlong=36.96,-122.02
 static NSString * const kSearchAPI = @"https://www.metaweather.com/api/location/search/";
-static NSString * const kQuery     = @"query";
-static NSString * const kLatLon    = @"lattlong";
 
 
 
@@ -52,26 +50,6 @@ static NSString * const kLatLon    = @"lattlong";
     {
         self.updateBlock = updateBlock;
         self.errorBlock  = errorBlock;
-        
-        [self.locationManager requestLocation];
-        
-        CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
-        switch (status)
-        {
-            case kCLAuthorizationStatusNotDetermined:
-                [self.locationManager requestWhenInUseAuthorization];
-                break;
-            case kCLAuthorizationStatusDenied:
-            case kCLAuthorizationStatusRestricted:
-                // disabled
-                break;
-            case kCLAuthorizationStatusAuthorizedAlways:
-            case kCLAuthorizationStatusAuthorizedWhenInUse:
-                // enabled
-                break;
-            default:
-                break;
-        }
     }
     
     return self;
@@ -158,6 +136,31 @@ static NSString * const kLatLon    = @"lattlong";
                           lon: self.currentLocation.longitude];
 }
 
+
+// MARK: - #
+
+-(void)requestDeviceLocation
+{
+    [self.locationManager requestLocation];
+    
+    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+    switch (status)
+    {
+        case kCLAuthorizationStatusNotDetermined:
+            [self.locationManager requestWhenInUseAuthorization];
+            break;
+        case kCLAuthorizationStatusDenied:
+        case kCLAuthorizationStatusRestricted:
+            // disabled
+            break;
+        case kCLAuthorizationStatusAuthorizedAlways:
+        case kCLAuthorizationStatusAuthorizedWhenInUse:
+            // enabled
+            break;
+    }
+}
+
+
 // MARK: - # fetch
 
 -(void)fetchLocationsWithQuery: (NSString *)query
@@ -195,6 +198,9 @@ static NSString * const kLatLon    = @"lattlong";
     NSString *query = [NSString stringWithFormat: @"query=%@", name];
     [self fetchLocationsWithQuery: query];
 }
+
+
+// MARK: - #
 
 -(NSInteger)numberOfLocations
 {

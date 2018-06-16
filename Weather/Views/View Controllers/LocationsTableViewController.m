@@ -39,19 +39,10 @@ static NSString * const kLocationCellID = @"locationTableViewCell";
     
     self.navigationItem.title = @"Locations";
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
     [self setupTableView];
     
-    [self updateTableViewWithUserNumber: self.locationVM.numberOfLocations];
-    
-    [self searchLocation: @"london"];
-//    [self.locationVM fetchLocationsByLat: 36.96
-//                                     lon: -122.02];
+    [self updateTableViewWithAnimation: YES];
+    [self.locationVM requestDeviceLocation];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -71,12 +62,12 @@ static NSString * const kLocationCellID = @"locationTableViewCell";
 
 // MARK: - # update
 
--(void)updateTableViewWithUserNumber: (NSInteger)number
+-(void)updateTableViewWithAnimation: (BOOL)animated
 {
     self.searchController.active = NO;
     self.locationVM.isSearching = NO;
     
-    if (number == 0)
+    if (animated)
     {
         [self.activityIndicatorView startAnimating];
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -99,13 +90,14 @@ static NSString * const kLocationCellID = @"locationTableViewCell";
         _locationVM = [[LocationViewModel alloc] initWithUpdateBlock: ^{
             
             strongify(self);
-            [self updateTableViewWithUserNumber: self.locationVM.numberOfLocations];
+            [self updateTableViewWithAnimation: NO];
             [self.tableView reloadData];
         }
                                                         errorBlock: ^(NSError * _Nonnull error) {
                                                             // TODO: handle error
+                                                            
                                                             strongify(self);
-                                                            [self updateTableViewWithUserNumber: self.locationVM.numberOfLocations];
+                                                            [self updateTableViewWithAnimation: NO];
                                                         }];
     }
     
@@ -146,6 +138,7 @@ static NSString * const kLocationCellID = @"locationTableViewCell";
     
     [self searchLocation: searchBar.text];
 }
+
 
 // MARK: - # UISearchControllerDelegate
 

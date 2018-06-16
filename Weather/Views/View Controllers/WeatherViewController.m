@@ -71,12 +71,7 @@ static NSString * const kWeatherCellID = @"weatherCell";
         _weatherVM = [[WeatherViewModel alloc] initWithUpdateBlock: ^{
             
             strongify(self);
-            self.navigationItem.title = self.weatherVM.locationName;
-            [self.weatherIcon setImageURL: [self.weatherVM weatherIcon]
-                          withPlaceholder: [UIImage imageNamed: @"weather"]];
-            self.tempLabel.text = [self.weatherVM tempAtIndex: 0];
-            self.othersLabel.text = [self.weatherVM othersAtIndex: 0];
-            [self.tableView reloadData];
+            [self updateWeathers];
         }
                                                         errorBlock: ^(NSError * _Nonnull error) {
                                                             // TODO: handle error
@@ -84,6 +79,18 @@ static NSString * const kWeatherCellID = @"weatherCell";
     }
     
     return _weatherVM;
+}
+
+-(void)updateWeathers
+{
+    self.navigationItem.title = self.weatherVM.locationName;
+    
+    [self.weatherIcon setImageURL: [self.weatherVM weatherIcon]
+                  withPlaceholder: [UIImage imageNamed: @"weather"]];
+    self.tempLabel.text = [self.weatherVM tempAtIndex: 0];
+    self.othersLabel.text = [self.weatherVM othersAtIndex: 0];
+    
+    [self.tableView reloadData];
 }
 
 

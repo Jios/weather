@@ -21,6 +21,7 @@
 -(instancetype _Nonnull)initWithUpdateBlock: (VoidBlock _Nonnull)updateBlock
                                  errorBlock: (ErrorBlock _Nonnull)errorBlock;
 
+-(void)requestDeviceLocation;
 -(void)fetchLocationsByName: (NSString *)name;
 
 
